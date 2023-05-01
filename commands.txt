@@ -1,0 +1,116 @@
+#1 create wagtail project
+mkdir <dir name>
+cd <dir name>
+python3 -m venv env
+venv\Scripts\activate.bat
+
+
+pip install wagtail
+
+wagtail start mysite
+
+python manage.py migrate && python manage.py createsuperuser && python manage.py runserver
+
+
+#2 dockerize wagtail
+check:
+https://www.accordbox.com/blog/dockerizing-wagtail-app/
+
+
+#3 docker commands:
+docker-compose run --rm web python manage.py startapp blog
+docker-compose run --rm web python manage.py makemigrations
+docker-compose run --rm web python manage.py migrate
+
+docker-compose up -d
+docker-compose logs -f
+docker-compose run --rm web python manage.py shell
+
+docker-compose stop
+docker-compose down
+docker-compose ps
+docker-compose -f docker-compose.prod.yml -p nextjs-wagtail-prod build
+
+
+#4 push docker:
+
+docker login
+user:donbonbon
+
+
+docker images /list images, then select the image
+
+docker tag <selected image>:latest donbonbon/<selected image>:latest
+
+check again docker images
+
+docker push donbonbon/<selected image>:latest
+
+
+#5 open digitial ocean
+create new token under API... if needed
+open power shell as admin
+if needed
+doctl auth init
+then enter the token
+
+it should be validtated
+
+165.227.167.189
+ssh -i C:\Users\anica\.ssh\do4 root@64.225.105.22
+ssh -i C:\Users\anica\.ssh\do4 nuser@64.225.105.22
+
+scp -r -i ../.ssh/do4 wagtail-dockerized/ root@64.225.105.22:/root
+
+
+
+
+#CORS HEaders
+https://www.geeksforgeeks.org/how-to-enable-cors-headers-in-your-django-project/
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        "NAME": "dbpostgres",
+        "USER": "dbuser",
+        "PASSWORD": "dbpsw",
+        "HOST": "localhost",
+        "PORT": "5432",
+    }
+}
+
+
+docean
+creating docker
+
+ref: https://linuxhint.com/install-docker-compose-ubuntu-22-04/
+login as root
+ssh -i C:\Users\anica\.ssh\do4 root@134.122.81.12
+
+sudo apt update
+sudo apt upgrade
+
+sudo apt install lsb-release ca-certificates apt-transport-https software-properties-common -y
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt update
+
+sudo apt install docker-ce
+
+sudo systemctl status docker
+
+docker-compose:
+
+mkdir -p ~/.docker/cli-plugins/
+
+sudo systemctl status docker
+
+curl -SL https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+
+chmod +x ~/.docker/cli-plugins/docker-compose
+
+docker compose version
+
+scp -r -i ../.ssh/do4 wagtail-dockerized/ root@134.122.81.12:/root
